@@ -1,0 +1,16 @@
+ChatGPT Blender Bridge 1.0.0 — Testbericht
+Datum: 2026-10-12
+
+Bestanden:
+- Python-Syntaxprüfung: Blender-Add-on, stdio-MCP-Server und HTTP-MCP-Server erfolgreich mit py_compile geprüft.
+- MCP-stdio-Selbsttests: 2/2 bestanden.
+- MCP-Initialisierung, Werkzeugliste, Ping und JSON-RPC-Fehlerantwort geprüft.
+- Fehlerpfad ohne laufenden Blender geprüft; der Server liefert eine verständliche Fehlermeldung.
+- Werkzeug-Schemas für 19 Werkzeuge aus dem Add-on-Code erzeugt.
+
+Nicht durchgeführt:
+- Kein Live-Test innerhalb einer echten Blender-5.2.2-Instanz in dieser Erstellungsumgebung.
+- Keine echte Codex- oder ChatGPT-Kontoverbindung getestet.
+- Kein End-to-End-Render- oder .blend-Speichertest.
+
+Status: Frühe Version 1.0.0, lokal weiter testen, bevor sie in wichtigen Projekten verwendet wird.

@@ -1,0 +1,13 @@
+schema_version = "1.0.0"
+id = "chatgpt_blender_bridge"
+version = "1.0.0"
+name = "ChatGPT Blender Bridge"
+tagline = "Local MCP bridge for Blender scene control"
+maintainer = "Community contributors"
+type = "add-on"
+blender_version_min = "4.2.0"
+license = ["SPDX:MIT"]
+
+[permissions]
+network = "Opens a local MCP listener bound only to 127.0.0.1"
+files = "Writes the user-enabled audit log, render previews and project copies"

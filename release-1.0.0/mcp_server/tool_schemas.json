@@ -1,0 +1,480 @@
+[
+  {
+    "name": "get_status",
+    "description": "Returns bridge status, Blender version, active file and security settings.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "scene_overview",
+    "description": "Summarizes the current scene, objects, frame, render settings and active object.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "list_objects",
+    "description": "Lists objects in the current scene with transforms, mesh counts and assigned materials.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Optional Blender object type filter, e.g. MESH or CAMERA."
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500,
+          "default": 100
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "inspect_object",
+    "description": "Returns details about one named object, including dimensions, mesh statistics, modifiers, materials and animation state.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "create_primitive",
+    "description": "Creates a mesh primitive. Supported kinds: CUBE, SPHERE, CYLINDER, CONE, PLANE, TORUS.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "CUBE",
+            "SPHERE",
+            "CYLINDER",
+            "CONE",
+            "PLANE",
+            "TORUS"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "size": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "default": 2.0
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "create_camera",
+    "description": "Adds a camera at the supplied world-space location and Euler rotation in degrees.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "rotation_deg": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "make_active": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "create_light",
+    "description": "Adds a light. Supported kinds: POINT, SUN, SPOT, AREA.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "POINT",
+            "SUN",
+            "SPOT",
+            "AREA"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "rotation_deg": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "power": {
+          "type": "number",
+          "exclusiveMinimum": 0,
+          "default": 1000
+        },
+        "color": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "set_transform",
+    "description": "Changes the location, Euler rotation (degrees), and/or scale of a named object. Omitted fields are left unchanged.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "location": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "rotation_deg": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "scale": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "duplicate_object",
+    "description": "Duplicates an object and its data, optionally assigning a new name and offsetting its location.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "new_name": {
+          "type": "string"
+        },
+        "offset": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "delete_object",
+    "description": "Deletes a named object. Blender shows a local approval prompt before this change is applied.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "create_material",
+    "description": "Creates or updates a material with an RGBA base color, metallic value and roughness.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "color": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "metallic": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.0
+        },
+        "roughness": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "assign_material",
+    "description": "Assigns a named material to a named object, replacing the first material slot when present.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "object_name": {
+          "type": "string"
+        },
+        "material_name": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "object_name",
+        "material_name"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "set_frame",
+    "description": "Sets the current scene frame.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "frame": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "frame"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "keyframe_transform",
+    "description": "Sets and keyframes the provided transform channels for an object at a specified frame.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "frame": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "location": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "rotation_deg": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "scale": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 3,
+          "maxItems": 3
+        }
+      },
+      "required": [
+        "name",
+        "frame"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "validate_scene",
+    "description": "Runs a non-destructive scene sanity check and reports missing camera, empty meshes, non-manifold mesh edges and material issues.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "repair_scene",
+    "description": "Applies selected non-destructive repairs: recalculate mesh normals, assign a default material to material-less meshes, ensure material nodes exist, and set the first available camera if none is active.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "fixes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "recalculate_normals",
+              "assign_default_material",
+              "enable_material_nodes",
+              "set_first_camera"
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "fixes"
+      ],
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "render_preview",
+    "description": "Renders a PNG preview to the configured project folder. Requires local approval first.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "Optional PNG filename, saved inside the configured project folder."
+        },
+        "resolution_x": {
+          "type": "integer",
+          "minimum": 64,
+          "maximum": 1920,
+          "default": 1280
+        },
+        "resolution_y": {
+          "type": "integer",
+          "minimum": 64,
+          "maximum": 1080,
+          "default": 720
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "save_blend_copy",
+    "description": "Saves a copy of the current .blend project in the configured project folder without changing the currently open file. Requires local approval and does not overwrite existing files.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "filename": {
+          "type": "string",
+          "description": "Optional .blend filename, saved inside the configured project folder."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+    "name": "execute_python",
+    "description": "Executes a Python script inside Blender with bpy available. Disabled by default; enable it in add-on preferences and approve each execution in Blender. This is full code execution, not a sandbox.",
+    "inputSchema": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "maxLength": 20000
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "additionalProperties": false
+    }
+  }
+]
